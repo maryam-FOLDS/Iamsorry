@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Message for You 💕</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Pacifico&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Hearts Animation */
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: fall linear infinite;
+            color: #ff69b4;
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Animated Background Circles for Start Screen */
+        .animated-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 20, 147, 0.1));
+            animation: float-circle 15s infinite ease-in-out;
+        }
+        
+        .circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+        
+        .circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 15%;
+            animation-duration: 10s;
+            animation-delay: 2s;
+        }
+        
+        .circle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 70%;
+            bottom: 10%;
+            animation-duration: 12s;
+            animation-delay: 4s;
+        }
+        
+        .circle:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            left: 40%;
+            animation-duration: 15s;
+            animation-delay: 1s;
+        }
+        
+        @keyframes float-circle {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-100px) rotate(180deg);
+                opacity: 0.8;
+            }
+        }
+        
+        /* Start Screen */
+        .start-screen {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .start-screen.fade-out {
+            opacity: 0 !important;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .start-heading {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3.5rem, 12vw, 6rem);
+            color: #fff;
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: glow-title 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+            z-index: 10;
+        }
+        
+        @keyframes glow-title {
+            0%, 100% { 
+                text-shadow: 0 0 30px rgba(255, 105, 180, 0.8), 0 0 60px rgba(255, 105, 180, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 0 0 40px rgba(255, 105, 180, 1), 0 0 80px rgba(255, 105, 180, 0.8);
+                transform: scale(1.02);
+            }
+        }
+        
+        .start-button {
+            background: linear-gradient(45deg, #ff6ec7, #ff69b4);
+            color: white;
+            border: none;
+            padding: 1.5rem 4rem;
+            font-size: 1.8rem;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulse-button 1.5s infinite;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .start-button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 20px 50px rgba(255, 105, 180, 0.7);
+        }
+        
+        @keyframes pulse-button {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 15px 40px rgba(255, 105, 180, 0.5);
+            }
+            50% { 
+                transform: scale(1.08);
+                box-shadow: 0 20px 50px rgba(255, 105, 180, 0.8);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 15px 40px rgba(255, 105, 180, 0.5);
+            }
+        }
+        
+        /* Volume Notice */
+        .volume-notice {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            z-index: 999;
+            animation: fadeInOut 2s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -40%); }
+            50% { opacity: 1; transform: translate(-50%, -50%); }
+            100% { opacity: 0; transform: translate(-50%, -60%); }
+        }
+        
+        /* Intro Text */
+        .intro-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: clamp(2rem, 6vw, 3rem);
+            text-align: center;
+            opacity: 0;
+            z-index: 950;
+            font-family: 'Great Vibes', cursive;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+        }
+        
+        .intro-text.fade-in {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Image Container */
+        .image-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            z-index: 500;
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .image-container.show {
+            opacity: 1;
+        }
+        
+        .floating-image {
+            max-width: 80%;
+            max-height: 50vh;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        .message-button {
+            margin-top: 2rem;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.4rem;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+        
+        .message-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: rotate-glow 3s linear infinite;
+        }
+        
+        .message-button::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493, #ff69b4);
+            border-radius: 35px;
+            z-index: -1;
+            filter: blur(15px);
+            opacity: 0.7;
+            animation: glow-border 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(255, 20, 147, 0.6), 0 0 60px rgba(255, 105, 180, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(255, 20, 147, 0.8), 0 0 80px rgba(255, 105, 180, 0.6);
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes rotate-glow {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        @keyframes glow-border {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .message-button:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+        
+        /* Typewriter Container */
+        .typewriter-container {
+            position: fixed;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 220, 230, 0.95));
+            padding: 1.5rem;
+            padding-top: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            z-index: 600;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .typewriter-header {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff1493;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        .typewriter-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 400;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            position: relative;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: #ff1493;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .sorry-button {
+            display: none;
+            margin: 1rem auto;
+            background: linear-gradient(45deg, #ff1493, #ff69b4, #ff1493);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 1.5rem 5rem;
+            font-size: 1.8rem;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            border-radius: 40px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.6);
+            animation: gradient-shift 3s ease infinite, glow-intense 1.5s ease-in-out infinite;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sorry-button.show {
+            opacity: 1;
+            transform: scale(1);
+            display: block;
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes glow-intense {
+            0%, 100% { 
+                box-shadow: 0 0 40px rgba(255, 20, 147, 0.7), 
+                            0 0 80px rgba(255, 105, 180, 0.5),
+                            inset 0 0 30px rgba(255, 255, 255, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(255, 20, 147, 0.9), 
+                            0 0 100px rgba(255, 105, 180, 0.7),
+                            inset 0 0 40px rgba(255, 255, 255, 0.4);
+                transform: scale(1.05);
+            }
+        }
+        
+        .sorry-button:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Sorry Message - More Beautiful */
+        .sorry-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #fff, #ffe0ec);
+            padding: 3rem 4rem;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(255, 20, 147, 0.3),
+                        0 15px 40px rgba(0, 0, 0, 0.1);
+            z-index: 700;
+            text-align: center;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .sorry-message::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.1) 0%, transparent 70%);
+            animation: rotate-slow 10s linear infinite;
+        }
+        
+        @keyframes rotate-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .sorry-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            45% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            80% { transform: scale(1); }
+        }
+        
+        /* Final Images */
+        .final-image {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            z-index: 400;
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Final Message */
+        .final-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            text-align: center;
+            opacity: 0;
+            z-index: 800;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .final-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: white;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        .emoji {
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .fade-out {
+            opacity: 0 !important;
+            transform: translate(-50%, -50%) scale(0.8) !important;
+        }
+        
+        .fade-in {
+            opacity: 1 !important;
+            transform: translate(-50%, -50%) scale(1) !important;
+        }
+        
+        .scale-in {
+            transform: translate(-50%, -50%) scale(1) !important;
+            opacity: 1 !important;
+        }
+        
+        /* Scrollbar styling for typewriter container */
+        .typewriter-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .typewriter-container::-webkit-scrollbar-track {
+            background: rgba(255, 105, 180, 0.1);
+            border-radius: 10px;
+        }
+        
+        .typewriter-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 105, 180, 0.5);
+            border-radius: 10px;
+        }
+        
+        .typewriter-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 105, 180, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Container -->
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+        <div class="animated-bg">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <h1 class="start-heading">A Message for You</h1>
+        <button class="start-button" id="startButton">Click to Start</button>
+    </div>
+    
+    <!-- Volume Notice -->
+    <div class="volume-notice hidden" id="volumeNotice">
+        🔊 Increase your volume
+    </div>
+    
+    <!-- Intro Text -->
+    <div class="intro-text" id="introText">
+        It all starts from here
+    </div>
+    
+    <!-- Image Container -->
+    <div class="image-container" id="imageContainer">
+        <img src="https://raw.githubusercontent.com/maryam-FOLDS/sorrymybachha/refs/heads/main/IMG-20250922-WA0050.jpg" 
+             alt="Our Memory" class="floating-image">
+        <button class="message-button" id="messageButton">MESSAGE FOR YOU</button>
+    </div>
+    
+    <!-- Typewriter Container -->
+    <div class="typewriter-container" id="typewriterContainer">
+        <div class="typewriter-header">MESSAGE FOR YOU</div>
+        <div class="typewriter-text" id="typewriterText"></div>
+        <button class="sorry-button" id="sorryButton">SORRY</button>
+    </div>
+    
+    <!-- Sorry Message -->
+    <div class="sorry-message" id="sorryMessage">
+        <div class="sorry-text">I am sorry my bachha<span class="emoji">😭💗</span></div>
+    </div>
+    
+    <!-- Final Images -->
+    <img src="https://raw.githubusercontent.com/maryam-FOLDS/sorrymybachha/refs/heads/main/IMG-20250922-WA0049.jpg" 
+         class="final-image" id="finalImage1">
+    <img src="https://raw.githubusercontent.com/maryam-FOLDS/sorrymybachha/refs/heads/main/IMG-20250922-WA0047.jpg" 
+         class="final-image" id="finalImage2">
+    
+    <!-- Final Message -->
+    <div class="final-message" id="finalMessage">
+        <div class="final-text">Together stronger forever <span class="emoji">🥹🥰💝</span></div>
+    </div>
+    
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop>
+        <source src="https://github.com/maryam-FOLDS/sorrymybachha/raw/refs/heads/main/Bakhuda%20Tumhi%20Ho%20%5BSlowedReverb%5D%20%20Atif%20Aslam%20%20lofi%20%20Textaudio.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="sorryAudio">
+        <source src="https://github.com/maryam-FOLDS/sorrymybachha/raw/refs/heads/main/AUD-20250923-WA0015.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // Create falling hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            const hearts = ['💕', '💖', '💗', '💝', '❤️'];
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = Math.random() * 3 + 5 + 's';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 8000);
+        }
+        
+        // Start creating hearts
+        setInterval(createHeart, 300);
+        
+        // Get elements
+        const startScreen = document.getElementById('startScreen');
+        const startButton = document.getElementById('startButton');
+        const volumeNotice = document.getElementById('volumeNotice');
+        const introText = document.getElementById('introText');
+        const imageContainer = document.getElementById('imageContainer');
+        const messageButton = document.getElementById('messageButton');
+        const typewriterContainer = document.getElementById('typewriterContainer');
+        const typewriterText = document.getElementById('typewriterText');
+        const sorryButton = document.getElementById('sorryButton');
+        const sorryMessage = document.getElementById('sorryMessage');
+        const finalImage1 = document.getElementById('finalImage1');
+        const finalImage2 = document.getElementById('finalImage2');
+        const finalMessage = document.getElementById('finalMessage');
+        const bgMusic = document.getElementById('bgMusic');
+        const sorryAudio = document.getElementById('sorryAudio');
+        
+        // Message for typewriter
+        const message = `My love, I know I have hurt you in so many ways, but trust me, I never meant to. You are my everything, and it breaks my heart to know that I disappointed you. I am truly sorry. Please believe me when I say this was the last time — I promise I will never repeat these mistakes again. Your anger is justified, but now I beg you to let it go so we can fix everything together.
+
+I cannot go back and change the past, but I can surely make our present and future better if you give us another chance. Let's start over — a fresh beginning where we leave old hurts behind and love each other the way we always did. I promise I will never force things on you, never bother you the way I did before, not even about small things. I've learned from my mistakes, and I only wish to make our bond stronger.
+
+I know my words may not heal the hurt I caused, but my actions will prove my love and sincerity. I am deeply sorry for every tear I've been the reason for. Please, my love, don't leave me in the middle of this journey. Your bacha needs you more than anything and loves you endlessly. 🥺❤️ Please forgive your bacha this time, please🥺`;
+        
+        // Typewriter effect with blinking cursor
+        function typeWriter(text, element, callback) {
+            let i = 0;
+            const speed = 50;
+            element.innerHTML = '';
+            
+            // Create cursor element
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            element.appendChild(cursor);
+            
+            function type() {
+                if (i < text.length) {
+                    // Insert text before cursor
+                    cursor.insertAdjacentText('beforebegin', text.charAt(i));
+                    i++;
+                    // Auto scroll to bottom
+                    typewriterContainer.scrollTop = typewriterContainer.scrollHeight;
+                    setTimeout(type, speed);
+                } else {
+                    // Remove cursor after typing is done
+                    setTimeout(() => {
+                        cursor.remove();
+                        if (callback) callback();
+                    }, 1000);
+                }
+            }
+            
+            type();
+        }
+        
+        // Smooth transition function
+        function smoothTransition(hideElement, showElement, delay = 500) {
+            if (hideElement) {
+                hideElement.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                if (hideElement === startScreen) {
+                    hideElement.classList.add('fade-out');
+                } else {
+                    hideElement.classList.add('fade-out');
+                }
+            }
+            
+            setTimeout(() => {
+                if (showElement) {
+                    showElement.classList.remove('hidden');
+                    showElement.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    showElement.classList.add('fade-in');
+                    if (showElement === imageContainer) {
+                        showElement.classList.add('show');
+                    }
+                }
+            }, delay);
+        }
+        
+        // Start button click with better animation
+        startButton.addEventListener('click', async () => {
+            // Add ripple effect
+            startButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                startButton.style.transform = '';
+            }, 200);
+            
+            // Play background music
+            try {
+                bgMusic.volume = 1;
+                await bgMusic.play();
+            } catch (e) {
+                console.log('Audio autoplay blocked');
+            }
+            
+            // Smooth fade out start screen completely
+            startScreen.classList.add('fade-out');
+            
+            // Show volume notice
+            setTimeout(() => {
+                volumeNotice.classList.remove('hidden');
+            }, 1500);
+            
+            // Show intro text with smooth transition (after start screen is gone)
+            setTimeout(() => {
+                volumeNotice.classList.add('hidden');
+                introText.classList.add('fade-in');
+            }, 3500);
+            
+            // Show image container with smooth transition
+            setTimeout(() => {
+                introText.classList.remove('fade-in');
+                introText.style.opacity = '0';
+                setTimeout(() => {
+                    imageContainer.classList.add('show');
+                }, 500);
+            }, 7000);
+        });
+        
+        // Message button click with smooth transition
+        messageButton.addEventListener('click', () => {
+            // Add ripple effect
+            messageButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                messageButton.style.transform = '';
+            }, 200);
+            
+            // Hide image container
+            imageContainer.classList.remove('show');
+            imageContainer.style.opacity = '0';
+            
+            // Show typewriter after transition
+            setTimeout(() => {
+                typewriterContainer.classList.add('fade-in');
+                
+                // Start typing after container is visible
+                setTimeout(() => {
+                    typeWriter(message, typewriterText, () => {
+                        // Show sorry button with animation after typewriter ends
+                        sorryButton.style.display = 'block';
+                        setTimeout(() => {
+                            sorryButton.classList.add('show');
+                        }, 200);
+                        
+                        // Auto-hide typewriter container after typing ends and button is shown
+                        setTimeout(() => {
+                            typewriterContainer.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                            typewriterContainer.style.opacity = '0';
+                            typewriterContainer.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                        }, 3000); // Wait 3 seconds after typing ends, then fade out
+                    });
+                }, 500);
+            }, 1000);
+        });
+        
+        // Sorry button click with smooth transitions
+        sorryButton.addEventListener('click', async () => {
+            // Add ripple effect
+            sorryButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                sorryButton.style.transform = '';
+            }, 200);
+            
+            // Immediately hide typewriter container completely with visibility hidden
+            typewriterContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            typewriterContainer.style.opacity = '0';
+            typewriterContainer.style.visibility = 'hidden';
+            typewriterContainer.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            typewriterContainer.style.pointerEvents = 'none';
+            
+            // Lower background music volume VERY smoothly and more
+            let vol = bgMusic.volume;
+            const fadeOutInterval = setInterval(() => {
+                vol -= 0.05;
+                if (vol <= 0.1) {
+                    bgMusic.volume = 0.1;
+                    clearInterval(fadeOutInterval);
+                } else {
+                    bgMusic.volume = vol;
+                }
+            }, 50);
+            
+            // Set sorry audio to full volume
+            sorryAudio.volume = 1;
+            
+            // Play sorry audio
+            try {
+                await sorryAudio.play();
+            } catch (e) {
+                console.log('Sorry audio failed');
+            }
+            
+            // Show sorry message with smooth scale animation
+            setTimeout(() => {
+                sorryMessage.classList.add('scale-in');
+            }, 500); // Reduced delay since typewriter is already hidden
+            
+            // When sorry audio ends
+            sorryAudio.addEventListener('ended', () => {
+                // Hide sorry message IMMEDIATELY when audio ends
+                sorryMessage.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                sorryMessage.style.transform = 'translate(-50%, -50%) scale(0)';
+                sorryMessage.style.opacity = '0';
+                sorryMessage.style.visibility = 'hidden';
+                sorryMessage.style.pointerEvents = 'none';
+                
+                // Restore background music volume IMMEDIATELY when audio ends
+                let vol = 0.1;
+                const fadeInInterval = setInterval(() => {
+                    vol += 0.1;
+                    if (vol >= 1) {
+                        bgMusic.volume = 1;
+                        clearInterval(fadeInInterval);
+                    } else {
+                        bgMusic.volume = vol;
+                    }
+                }, 30);
+                
+                // Show first final image IMMEDIATELY after sorry message is hidden
+                setTimeout(() => {
+                    finalImage1.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    finalImage1.style.opacity = '1';
+                }, 300);
+                
+                // Transition to second final image
+                setTimeout(() => {
+                    finalImage1.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
+                    finalImage1.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        finalImage2.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
+                        finalImage2.style.opacity = '1';
+                    }, 1000);
+                }, 4000);
+                
+                // Show final message with beautiful transition
+                setTimeout(() => {
+                    finalImage2.style.filter = 'brightness(0.4)';
+                    finalMessage.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    finalMessage.style.opacity = '1';
+                    finalMessage.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 6500);
+            }, {once: true});
+        });
+        
+        // Mobile touch optimization
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Add touch feedback for all buttons
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            button.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
